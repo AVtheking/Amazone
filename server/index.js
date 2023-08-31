@@ -4,6 +4,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
+const adminRouter = require("./routes/admin");
 
 const PORT = 3000;//can be any number here 
 const app = express();//storing express instant in variable
@@ -14,6 +15,7 @@ const DB="mongodb+srv://Ankit:varshney@cluster1.auetwxy.mongodb.net/?retryWrites
 //MiddleWare are used here
 app.use(express.json());
 app.use(authRouter);
+app.use(adminRouter);
 
 //CREATING API
 

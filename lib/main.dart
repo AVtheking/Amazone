@@ -1,6 +1,7 @@
+import 'package:amazon_clone/common/widgets/bottom_bar.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/features/admin/screens/admin_screen.dart';
 import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
-import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:amazon_clone/features/services/auth_service.dart';
 import 'package:amazon_clone/models/user.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
           scaffoldBackgroundColor: GlobalVariables.backgroundColor,
@@ -46,7 +48,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       home: user == null
           ? const AuthScreen()
           : user.token.isNotEmpty
-              ? const HomeScreen()
+              ? user.type == 'user'
+                  ? const BottomBar()
+                  : const AdminPanel()
               : const AuthScreen(),
     );
   }
