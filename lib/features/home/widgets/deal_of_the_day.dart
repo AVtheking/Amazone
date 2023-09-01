@@ -23,7 +23,7 @@ class _DealOfDayState extends State<DealOfDay> {
         ),
         Image.network(
           'https://images.unsplash.com/photo-1682685797857-97de838c192e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60',
-          height: 200,
+          height: 250,
           fit: BoxFit.cover,
         ),
         Container(

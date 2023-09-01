@@ -1,8 +1,13 @@
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/features/home/screens/category_screen.dart';
 import 'package:flutter/material.dart';
 
 class TopCategories extends StatelessWidget {
   const TopCategories({super.key});
+  void navigateToCategoryScreen(BuildContext context, String category) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => CategoryScreen(category: category)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +21,19 @@ class TopCategories extends StatelessWidget {
           itemBuilder: (context, index) {
             return Column(
               children: [
-                Container(
-                  height: 60,
-                  width: 60,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(
-                        GlobalVariables.categoryImages[index]['image']!),
+                GestureDetector(
+                  onTap: () {
+                    navigateToCategoryScreen(context,
+                        GlobalVariables.categoryImages[index]['title']!);
+                  },
+                  child: Container(
+                    height: 60,
+                    width: 60,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage(
+                          GlobalVariables.categoryImages[index]['image']!),
+                    ),
                   ),
                 ),
                 Text(

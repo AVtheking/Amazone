@@ -91,9 +91,28 @@ class AdminService {
         },
       );
     } catch (e) {
-      print(e.toString());
       showSnackBar(context, e.toString());
     }
     return products;
+  }
+
+  void deleteProduct(
+      {required BuildContext context,
+      required Product product,
+      required WidgetRef ref,
+      required VoidCallback onSuccess}) async {
+    try {
+      final user = ref.read(userProvider)!;
+      http.Response res = await http.post(
+          Uri.parse("$uri/admin/delete-product"),
+          body: jsonEncode({'id': product.id}),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': user.token
+          });
+      httpErrorHandle(response: res, context: context, onSuccess: onSuccess);
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 }

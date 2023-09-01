@@ -20,11 +20,23 @@ void navigateToAddProduct(BuildContext context) {
 
 class _ProductScreenState extends ConsumerState<ProductScreen> {
   final AdminService adminService = AdminService();
-  List<Product>? product;
+  List<Product>? productList;
 
   fetchAllProducts(BuildContext context) async {
-    product = await adminService.fetchAllProduct(context, ref);
+    productList = await adminService.fetchAllProduct(context, ref);
     setState(() {});
+  }
+
+  void deleteProduct(BuildContext context, Product product, int index) {
+    adminService.deleteProduct(
+        context: context,
+        product: product,
+        ref: ref,
+        onSuccess: () {
+          setState(() {
+            productList!.removeAt(index);
+          });
+        });
   }
 
   @override
@@ -36,16 +48,16 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: product == null
+      body: productList == null
           ? const Center(
               child: CircularProgressIndicator(),
             )
           : GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2),
-              itemCount: product!.length,
+              itemCount: productList!.length,
               itemBuilder: ((context, index) {
-                final productData = product![index];
+                final productData = productList![index];
                 return Column(
                   children: [
                     SizedBox(
@@ -62,7 +74,11 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                             maxLines: 2,
                           ),
                         ),
-                        const Icon(Icons.delete)
+                        IconButton(
+                            onPressed: () {
+                              deleteProduct(context, productData, index);
+                            },
+                            icon: const Icon(Icons.delete))
                       ],
                     )
                   ],
