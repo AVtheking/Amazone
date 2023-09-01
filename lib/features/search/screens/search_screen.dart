@@ -1,5 +1,6 @@
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/features/home/widgets/address_box.dart';
+import 'package:amazon_clone/features/search/widget/search_product.dart';
 import 'package:amazon_clone/features/services/services/home_services.dart';
 import 'package:amazon_clone/models/product_model.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +19,13 @@ class SearchScreen extends ConsumerStatefulWidget {
 }
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
+  final HomeService homeService = HomeService();
   List<Product>? productList;
   fetchProductsOnSearch(BuildContext context) async {
     productList = await ref
         .read(homeServiceProvider.notifier)
         .fetchProductOnSearch(context: context, query: widget.query, ref: ref);
+    setState(() {});
   }
 
   @override
@@ -101,7 +104,13 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Expanded(child: ListView.builder(itemBuilder: itemBuilder))
+                  Expanded(
+                      child: ListView.builder(
+                          itemCount: productList!.length,
+                          itemBuilder: (context, index) {
+                            final productData = productList![index];
+                            return SearchProduct(product: productData);
+                          }))
                 ],
               ));
   }
