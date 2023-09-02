@@ -19,6 +19,12 @@ class SearchScreen extends ConsumerStatefulWidget {
 }
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  void navigateToSearchScreen(BuildContext context, String value) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => SearchScreen(query: value)));
+  }
+
   final HomeService homeService = HomeService();
   List<Product>? productList;
   fetchProductsOnSearch(BuildContext context) async {
@@ -55,6 +61,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       borderRadius: BorderRadius.circular(7),
                       elevation: 1,
                       child: TextFormField(
+                        onFieldSubmitted: (value) =>
+                            navigateToSearchScreen(context, value),
+                        controller: _searchController,
                         decoration: InputDecoration(
                             hintText: "Search Amazon.in",
                             hintStyle: const TextStyle(

@@ -110,6 +110,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         height: 10,
                       ),
                       SignUpButton(
+                          color: GlobalVariables.secondaryColor,
                           onTap: () {
                             if (signUpKey.currentState!.validate()) {
                               signUpUser(context);
@@ -162,6 +163,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         height: 10,
                       ),
                       SignUpButton(
+                          color: GlobalVariables.secondaryColor,
                           onTap: () {
                             signInUser(context);
                           },

@@ -31,21 +31,22 @@ class HomeService extends StateNotifier<bool> {
         },
       );
       httpErrorHandle(
-          response: res,
-          context: context,
-          onSuccess: () {
-            for (int i = 0; i < jsonDecode(res.body).length; i++) {
-              products.add(
-                Product.fromJson(
-                  jsonEncode(
-                    jsonDecode(res.body)[i],
-                  ),
+        response: res,
+        context: context,
+        onSuccess: () {
+          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+            products.add(
+              Product.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
                 ),
-              );
-            }
-          });
-      // print(res.body);
+              ),
+            );
+          }
+        },
+      );
     } catch (e) {
+      // print(e.toString());
       showSnackBar(context, e.toString());
     }
     return products;
@@ -69,20 +70,55 @@ class HomeService extends StateNotifier<bool> {
         },
       );
       httpErrorHandle(
-          response: res,
-          context: context,
-          onSuccess: () {
-            for (int i = 0; i < jsonDecode(res.body).length; i++) {
-              products.add(
-                Product.fromJson(
-                  jsonEncode(jsonDecode(res.body)[i]),
+        response: res,
+        context: context,
+        onSuccess: () {
+          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+            products.add(
+              Product.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
                 ),
-              );
-            }
-          });
+              ),
+            );
+          }
+        },
+      );
     } catch (e) {
+      // print(e.toString());
       showSnackBar(context, e.toString());
     }
     return products;
+  }
+
+  void rateProduct(
+      {required BuildContext context,
+      required WidgetRef ref,
+      required Product product,
+      required double rating,
+      required VoidCallback onSuccess}) async {
+    try {
+      final user = ref.read(userProvider)!;
+      http.Response res = await http.post(
+        Uri.parse("$uri/api/rate-product"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+        body: jsonEncode(
+          {
+            'id': product.id!,
+            'rating': rating,
+          },
+        ),
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: onSuccess,
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 }

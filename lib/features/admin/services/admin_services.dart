@@ -18,8 +18,8 @@ class AdminService {
       {required BuildContext context,
       required String name,
       required String description,
-      required int price,
-      required int quantity,
+      required double price,
+      required double quantity,
       required String category,
       required List<File> images,
       required WidgetRef ref}) async {

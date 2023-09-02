@@ -2,9 +2,9 @@ import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class RatingBar extends StatelessWidget {
+class RatingBarWidget extends StatelessWidget {
   final double rating;
-  const RatingBar({
+  const RatingBarWidget({
     super.key,
     required this.rating,
   });
