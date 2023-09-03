@@ -180,4 +180,32 @@ class HomeService extends StateNotifier<bool> {
       showSnackBar(context, e.toString());
     }
   }
+
+  void deleteToCart({
+    required BuildContext context,
+    required Product product,
+    required WidgetRef ref,
+  }) async {
+    try {
+      final user = ref.read(userProvider)!;
+      http.Response res = await http.delete(
+        Uri.parse("$uri/api/delete-product/${product.id}"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+      );
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            User updatedUser =
+                user.copyWith(cart: jsonDecode(res.body)['cart']);
+            ref.read(userProvider.notifier).update((state) => updatedUser);
+            showSnackBar(context, "Item deleted successfully");
+          });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 }
