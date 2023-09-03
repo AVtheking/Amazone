@@ -33,4 +33,4 @@ const proudctSchema = mongoose.Schema({
     ratings:[ratingSchema]
 });
 const Product = mongoose.model('product', proudctSchema);
-module.exports=Product;
+module.exports={Product,proudctSchema};

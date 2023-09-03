@@ -1,7 +1,7 @@
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/features/home/services/home_services.dart';
 import 'package:amazon_clone/features/home/widgets/address_box.dart';
 import 'package:amazon_clone/features/search/widget/search_product.dart';
-import 'package:amazon_clone/features/services/services/home_services.dart';
 import 'package:amazon_clone/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -109,7 +109,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               )
             : Column(
                 children: [
-                  AddressBox(),
+                  const AddressBox(),
                   const SizedBox(
                     height: 10,
                   ),

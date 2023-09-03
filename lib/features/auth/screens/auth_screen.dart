@@ -1,7 +1,7 @@
 import 'package:amazon_clone/common/widgets/custom_text_widget.dart';
 import 'package:amazon_clone/common/widgets/sign_up_button.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
-import 'package:amazon_clone/features/services/auth_service.dart';
+import 'package:amazon_clone/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

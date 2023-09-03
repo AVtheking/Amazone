@@ -1,8 +1,8 @@
 import 'package:amazon_clone/common/widgets/sign_up_button.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/features/home/services/home_services.dart';
 import 'package:amazon_clone/features/search/screens/search_screen.dart';
 import 'package:amazon_clone/features/search/widget/ratting_bar.dart';
-import 'package:amazon_clone/features/services/services/home_services.dart';
 import 'package:amazon_clone/main.dart';
 import 'package:amazon_clone/models/product_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -59,6 +59,12 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
             setState(() {});
           });
     });
+  }
+
+  void addToCart(BuildContext context) {
+    ref
+        .read(homeServiceProvider.notifier)
+        .addToCart(context: context, product: widget.product, ref: ref);
   }
 
   @override
@@ -208,7 +214,9 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SignUpButton(
-                  onTap: () {},
+                  onTap: () {
+                    addToCart(context);
+                  },
                   text: "Add to Cart",
                   color: const Color.fromARGB(255, 233, 211, 19),
                 ),

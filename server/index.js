@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
 const adminRouter = require("./routes/admin");
 const productRoute = require("./routes/product");
+const userRouter = require("./routes/user");
 
 const PORT = 3000;//can be any number here 
 const app = express();//storing express instant in variable
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(authRouter);
 app.use(adminRouter);
 app.use(productRoute);
+app.use(userRouter);
 
 //CREATING API
 

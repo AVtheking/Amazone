@@ -4,7 +4,6 @@ import 'package:amazon_clone/features/home/widgets/carousel_images.dart';
 import 'package:amazon_clone/features/home/widgets/deal_of_the_day.dart';
 import 'package:amazon_clone/features/home/widgets/top_categories.dart';
 import 'package:amazon_clone/features/search/screens/search_screen.dart';
-import 'package:amazon_clone/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,7 +23,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider)!;
+    // final user = ref.watch(userProvider)!;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),

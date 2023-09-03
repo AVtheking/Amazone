@@ -1,3 +1,4 @@
+import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:flutter/material.dart';
 
 class SignUpButton extends StatelessWidget {
@@ -20,7 +21,11 @@ class SignUpButton extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: color == GlobalVariables.secondaryColor
+              ? Colors.white
+              : Colors.black,
+        ),
       ),
     );
   }

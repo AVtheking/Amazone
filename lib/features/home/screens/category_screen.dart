@@ -1,7 +1,7 @@
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/features/accounts/widgets/product_widget.dart';
 import 'package:amazon_clone/features/home/screens/product_detail_screen.dart';
-import 'package:amazon_clone/features/services/services/home_services.dart';
+import 'package:amazon_clone/features/home/services/home_services.dart';
 import 'package:amazon_clone/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

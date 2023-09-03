@@ -1,24 +1,25 @@
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/features/accounts/screens/account_screen.dart';
+import 'package:amazon_clone/features/cart/screens/cart_screen.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
+import 'package:amazon_clone/main.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BottomBar extends StatefulWidget {
+class BottomBar extends ConsumerStatefulWidget {
   const BottomBar({super.key});
 
   @override
-  State<BottomBar> createState() => _BottomBarState();
+  ConsumerState<BottomBar> createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _BottomBarState extends ConsumerState<BottomBar> {
   int _page = 0;
   List<Widget> pages = [
     const HomeScreen(),
     const AccountScreen(),
-    const Center(
-      child: Text('cart Screen'),
-    ),
+    const CartScreen()
   ];
   void updatePages(int value) {
     setState(() {
@@ -28,6 +29,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider)!;
     return Scaffold(
       body: pages[_page],
       bottomNavigationBar: BottomNavigationBar(
@@ -85,13 +87,13 @@ class _BottomBarState extends State<BottomBar> {
                   ),
                 ),
               ),
-              child: const badges.Badge(
-                  badgeContent: Text('2'),
-                  badgeStyle: badges.BadgeStyle(
+              child: badges.Badge(
+                  badgeContent: Text(user.cart.length.toString()),
+                  badgeStyle: const badges.BadgeStyle(
                     elevation: 0,
                     badgeColor: Colors.white,
                   ),
-                  child: Icon(Icons.shopping_cart_outlined)),
+                  child: const Icon(Icons.shopping_cart_outlined)),
             ),
             label: '',
           ),

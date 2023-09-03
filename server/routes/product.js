@@ -1,7 +1,7 @@
 const express = require('express');
 const productRoute = express.Router();
 const auth = require("../middlewares/auth");
-const Product = require('../models/product');
+const {Product} = require('../models/product');
 
 productRoute.get("/api/product", auth, async (req, res) => {
     try {
@@ -47,4 +47,26 @@ productRoute.post("/api/rate-product", auth, async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
+productRoute.get("/api/deal-of-day",auth,async (req, res) => {
+    try {
+        let maxRating = 0;
+        let totalRating = 0;
+        
+        let products = await Product.find({});
+        products = products.sort((a, b) => {
+            let aSum = 0;
+            let bSum = 0;
+            for (let i = 0; i < a.ratings.length; i++) {
+                aSum += a.ratings[i].rating;
+            }
+            for (let i = 0; i < b.ratings.length; i++) {
+                bSum += b.ratings[i].rating;
+            }
+            return aSum < bSum ? 1 : -1;
+        });
+        res.json(products[0]);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+})
 module.exports = productRoute;
