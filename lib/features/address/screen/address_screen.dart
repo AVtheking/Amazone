@@ -1,12 +1,15 @@
 import 'package:amazon_clone/common/widgets/custom_text_widget.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/constants/utilts.dart';
+import 'package:amazon_clone/features/address/service/address_service.dart';
 import 'package:amazon_clone/main.dart';
+import 'package:amazon_clone/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pay/pay.dart';
 
 class AddressScreem extends ConsumerStatefulWidget {
-  final int sum;
+  final double sum;
   const AddressScreem({
     super.key,
     required this.sum,
@@ -21,6 +24,10 @@ class _AddressScreemState extends ConsumerState<AddressScreem> {
   final TextEditingController areaController = TextEditingController();
   final TextEditingController pincodeController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
+  final formkey = GlobalKey<FormState>();
+
+  final Future<PaymentConfiguration> _googlePayConfigFuture =
+      PaymentConfiguration.fromAsset('gpay.json');
 
   @override
   void dispose() {
@@ -30,6 +37,8 @@ class _AddressScreemState extends ConsumerState<AddressScreem> {
     cityController.dispose();
     super.dispose();
   }
+
+  String addressTobeUsed = "";
 
   List<PaymentItem> paymentItems = [];
   @override
@@ -42,12 +51,44 @@ class _AddressScreemState extends ConsumerState<AddressScreem> {
     super.initState();
   }
 
-  void onGooglePayResult(res) {}
+  void onGooglePayResult(res, BuildContext context) {
+    final user = ref.watch(userProvider)!;
+    if (user.address != addressTobeUsed) {
+      ref
+          .read(addressServiceProvider)
+          .saveAddress(context: context, address: addressTobeUsed);
+    }
+    ref.read(addressServiceProvider).placeOrder(
+        context: context, address: addressTobeUsed, totalSum: widget.sum);
+  }
+
+  void payPressed(
+      String addresseFromProvider, User user, BuildContext context) {
+    addressTobeUsed = "";
+    bool isForm = houseController.text.isNotEmpty ||
+        areaController.text.isNotEmpty ||
+        pincodeController.text.isNotEmpty ||
+        cityController.text.isNotEmpty;
+    if (isForm) {
+      if (formkey.currentState!.validate()) {
+        addressTobeUsed =
+            "${houseController.text}, ${areaController.text},${cityController.text}-${pincodeController.text} ";
+      } else {
+        throw Exception("Please Enter all the values!");
+      }
+    } else if (addresseFromProvider.isNotEmpty) {
+      addressTobeUsed = user.address;
+    } else {
+      showSnackBar(context, "Error");
+    }
+    print(addressTobeUsed);
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider)!;
-    final address = "Wall Street";
+
+    // final address = "Wall Street";
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -63,7 +104,7 @@ class _AddressScreemState extends ConsumerState<AddressScreem> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            if (address.isNotEmpty)
+            if (user.address.isNotEmpty)
               Column(
                 children: [
                   Container(
@@ -76,7 +117,7 @@ class _AddressScreemState extends ConsumerState<AddressScreem> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        address,
+                        user.address,
                         style: const TextStyle(fontSize: 18),
                       ),
                     ),
@@ -97,45 +138,49 @@ class _AddressScreemState extends ConsumerState<AddressScreem> {
                 ],
               ),
             Form(
+                key: formkey,
                 child: Column(
-              children: [
-                CustomTextField(
-                    controller: houseController,
-                    hintText: "Flat, House no, Building"),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                    controller: houseController, hintText: "Area, Street"),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                    controller: houseController, hintText: "Pincode"),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                    controller: houseController, hintText: "Town/City"),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            )),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GooglePayButton(
-                  paymentConfigurationAsset: "gpay.json",
-                  onPaymentResult: onGooglePayResult,
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 15.0),
-                  loadingIndicator: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  width: double.infinity,
-                  type: GooglePayButtonType.buy,
-                  paymentItems: paymentItems),
-            )
+                  children: [
+                    CustomTextField(
+                        controller: houseController,
+                        hintText: "Flat, House no, Building"),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CustomTextField(
+                        controller: areaController, hintText: "Area, Street"),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CustomTextField(
+                        controller: pincodeController, hintText: "Pincode"),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CustomTextField(
+                        controller: cityController, hintText: "Town/City"),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                )),
+            FutureBuilder<PaymentConfiguration>(
+                future: _googlePayConfigFuture,
+                builder: (context, snapshot) => snapshot.hasData
+                    ? GooglePayButton(
+                        paymentConfiguration: snapshot.data!,
+                        paymentItems: paymentItems,
+                        onPressed: () =>
+                            payPressed(user.address, user, context),
+                        type: GooglePayButtonType.buy,
+                        margin: const EdgeInsets.only(top: 15.0),
+                        onPaymentResult: (res) =>
+                            onGooglePayResult(res, context),
+                        loadingIndicator: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : const SizedBox.shrink()),
           ],
         ),
       )),

@@ -22,7 +22,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
         MaterialPageRoute(builder: (context) => SearchScreen(query: value)));
   }
 
-  void navigateToAddressScreen(BuildContext context, int sum) {
+  void navigateToAddressScreen(BuildContext context, double sum) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AddressScreem(sum: sum),
@@ -33,7 +33,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
   final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    int sum = 0;
+    double sum = 0;
     final user = ref.watch(userProvider)!;
     user.cart
         .map((e) => sum += e['quantity'] * e['product']['price'] as int)
