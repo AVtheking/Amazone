@@ -19,16 +19,17 @@ void navigateToAddProduct(BuildContext context) {
 }
 
 class _ProductScreenState extends ConsumerState<ProductScreen> {
-  final AdminService adminService = AdminService();
+  // final AdminService adminService = AdminService();
   List<Product>? productList;
 
   fetchAllProducts(BuildContext context) async {
-    productList = await adminService.fetchAllProduct(context, ref);
+    productList =
+        await ref.read(adminServiceProvider).fetchAllProduct(context, ref);
     setState(() {});
   }
 
   void deleteProduct(BuildContext context, Product product, int index) {
-    adminService.deleteProduct(
+    ref.read(adminServiceProvider).deleteProduct(
         context: context,
         product: product,
         ref: ref,

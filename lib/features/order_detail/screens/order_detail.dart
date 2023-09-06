@@ -1,5 +1,8 @@
+import 'package:amazon_clone/common/widgets/sign_up_button.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/features/admin/services/admin_services.dart';
 import 'package:amazon_clone/features/search/screens/search_screen.dart';
+import 'package:amazon_clone/main.dart';
 import 'package:amazon_clone/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,6 +38,20 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
   void navigateToSearchScreen(BuildContext context, String value) {
     Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => SearchScreen(query: value)));
+  }
+
+  void changeStatus(int status) {
+    if (status < 3) {
+      ref.read(adminServiceProvider).changeStatus(
+          context: context,
+          status: status + 1,
+          order: widget.order,
+          onSuccess: () {
+            setState(() {
+              currentState += 1;
+            });
+          });
+    }
   }
 
   @override
@@ -199,30 +216,41 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                   border: Border.all(color: Colors.black12),
                 ),
                 child: Stepper(
-                    controlsBuilder: (context, details) => const SizedBox(),
+                    currentStep: currentState,
+                    controlsBuilder: (context, details) {
+                      final user = ref.watch(userProvider)!;
+                      if (user.type == "admin") {
+                        return SignUpButton(
+                          onTap: () => changeStatus(details.currentStep),
+                          text: "Done",
+                          color: GlobalVariables.secondaryColor,
+                        );
+                      }
+                      return const SizedBox();
+                    },
                     steps: [
                       Step(
                           title: const Text("Pending"),
                           content:
                               const Text("Your order is yet to be delivered"),
-                          isActive: currentState >= 0,
-                          state: currentState >= 0
+                          isActive: currentState > 0,
+                          state: currentState > 0
                               ? StepState.complete
                               : StepState.indexed),
                       Step(
                           title: const Text("Completed"),
                           content: const Text(
                               "Your order has been delivered! you are yet to sign"),
-                          isActive: currentState >= 1,
-                          state: currentState >= 1
+                          isActive: currentState > 1,
+                          state: currentState > 1
                               ? StepState.complete
                               : StepState.indexed),
                       Step(
                           title: const Text("Recieved"),
                           content: const Text(
                               "Your order has been delivered! and signed by you"),
-                          isActive: currentState >= 2,
-                          state: currentState >= 2
+                          isActive: currentState > 2,
+                          state: currentState > 2
                               ? StepState.complete
                               : StepState.indexed),
                       Step(

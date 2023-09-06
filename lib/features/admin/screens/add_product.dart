@@ -22,7 +22,7 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
-  final AdminService _adminService = AdminService();
+  // final AdminService _adminService = AdminService();
   final _addProductFormKey = GlobalKey<FormState>();
   @override
   void dispose() {
@@ -52,16 +52,16 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
   ];
   void sellProduct(BuildContext context) {
     if (_addProductFormKey.currentState!.validate() && images.isNotEmpty) {
-      _adminService.sellProduct(
-        context: context,
-        name: _nameController.text,
-        description: _descriptionController.text,
-        price: double.parse(_priceController.text),
-        quantity: double.parse(_quantityController.text),
-        category: category,
-        images: images,
-        ref: ref,
-      );
+      ref.watch(adminServiceProvider).sellProduct(
+            context: context,
+            name: _nameController.text,
+            description: _descriptionController.text,
+            price: double.parse(_priceController.text),
+            quantity: double.parse(_quantityController.text),
+            category: category,
+            images: images,
+            ref: ref,
+          );
     }
   }
 

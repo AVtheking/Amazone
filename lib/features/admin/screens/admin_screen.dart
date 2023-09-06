@@ -1,4 +1,6 @@
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/features/admin/screens/analytics_screen.dart';
+import 'package:amazon_clone/features/admin/screens/order_detail_screen.dart';
 import 'package:amazon_clone/features/admin/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +21,8 @@ class _AdminPanelState extends State<AdminPanel> {
 
   List pages = [
     const ProductScreen(),
-    const Text("Analytics"),
-    const Text("inbox")
+    const AnalyticsScreen(),
+    const AdminOrderDetailScreen()
   ];
 
   @override
