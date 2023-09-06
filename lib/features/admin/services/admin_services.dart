@@ -195,6 +195,7 @@ class AdminService {
           response: res,
           context: context,
           onSuccess: () {
+            // print(res.body);
             var response = jsonDecode(res.body);
             totalEarning = response['totalEarning'];
             sales = [
@@ -204,8 +205,10 @@ class AdminService {
               Sale("Books", response['bookEarning']),
               Sale("Fashion", response['fashionEarning']),
             ];
+            // print(sales);
           });
     } catch (e) {
+      // print(e);
       showSnackBar(context, e.toString());
     }
     return {'sales': sales, 'totalEarning': totalEarning};

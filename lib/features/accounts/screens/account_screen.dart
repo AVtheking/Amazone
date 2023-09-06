@@ -1,14 +1,19 @@
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/features/accounts/service/account_service.dart';
 import 'package:amazon_clone/features/accounts/widgets/account_button.dart';
 import 'package:amazon_clone/features/accounts/widgets/below_app_bar.dart';
 import 'package:amazon_clone/features/accounts/widgets/orders.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
+  void logOut(BuildContext context, WidgetRef ref) {
+    ref.watch(accountServiceProvider).logOut(context);
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -62,7 +67,11 @@ class AccountScreen extends StatelessWidget {
           ),
           Row(
             children: [
-              AccountButton(text: 'Log Out', onTap: () {}),
+              AccountButton(
+                  text: 'Log Out',
+                  onTap: () {
+                    logOut(context, ref);
+                  }),
               AccountButton(text: 'Your WishList', onTap: () {}),
             ],
           ),

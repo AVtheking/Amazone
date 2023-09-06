@@ -84,6 +84,7 @@ adminRouter.get("/admin/analytics", admin, async (req, res) => {
             essentialEarning,
             appliancesEarning,
             bookEarning,
+            fashionEarning
         }
 
         res.json(earning);

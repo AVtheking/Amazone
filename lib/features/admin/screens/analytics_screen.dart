@@ -1,5 +1,7 @@
 import 'package:amazon_clone/features/admin/services/admin_services.dart';
+import 'package:amazon_clone/features/admin/widgets/category_product.dart';
 import 'package:amazon_clone/models/sale.dart';
+import 'package:charts_flutter_maintained/charts_flutter_maintained.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,7 +37,19 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             child: CircularProgressIndicator(),
           )
         : Column(
-            children: [Text("\$$sales")],
+            children: [
+              Text("\$$totalEarning"),
+              SizedBox(
+                height: 250,
+                child: CategoryProductChart(seriesList: [
+                  Series(
+                      id: "Sales",
+                      data: sales!,
+                      domainFn: (Sale sale, _) => sale.label,
+                      measureFn: (Sale sale, _) => sale.earnings)
+                ]),
+              )
+            ],
           );
   }
 }
