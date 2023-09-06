@@ -1,6 +1,7 @@
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/features/accounts/service/account_service.dart';
 import 'package:amazon_clone/features/accounts/widgets/product_widget.dart';
+import 'package:amazon_clone/features/order_detail/screens/order_detail.dart';
 import 'package:amazon_clone/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,16 @@ class _OrdersState extends ConsumerState<Orders> {
     orders =
         await ref.read(accountServiceProvider).fetchAllOrders(context: context);
     setState(() {});
+  }
+
+  void navigateToDetailScreen(BuildContext contetxt, Order order) {
+    Navigator.of(contetxt).push(
+      MaterialPageRoute(
+        builder: (context) => OrderDetailsScreen(
+          order: order,
+        ),
+      ),
+    );
   }
 
   @override
@@ -62,7 +73,10 @@ class _OrdersState extends ConsumerState<Orders> {
                     itemCount: orders!.length,
                     itemBuilder: (context, index) {
                       final image = orders![index].products[0].images[0];
-                      return ProductWidget(image: image);
+                      return GestureDetector(
+                          onTap: () =>
+                              navigateToDetailScreen(context, orders![index]),
+                          child: ProductWidget(image: image));
                     }),
               )
             ],

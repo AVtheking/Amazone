@@ -32,7 +32,7 @@ class AccountService {
           context: context,
           onSuccess: () {
             for (int i = 0; i < jsonDecode(res.body).length; i++) {
-              print(jsonDecode(res.body)[i]);
+              // print(jsonDecode(res.body)[i]);
               // print(jsonDecode(res.body)[i]['products']);
 
               orders.add(
